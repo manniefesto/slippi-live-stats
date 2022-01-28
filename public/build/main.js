@@ -365,12 +365,12 @@ var app = (function () {
     			a.textContent = "Svelte tutorial";
     			t6 = text(" to learn how to build Svelte apps.");
     			attr_dev(h1, "class", "svelte-2x1evt");
-    			add_location(h1, file, 5, 1, 51);
+    			add_location(h1, file, 13, 1, 222);
     			attr_dev(a, "href", "https://svelte.dev/tutorial");
-    			add_location(a, file, 6, 14, 89);
-    			add_location(p, file, 6, 1, 76);
+    			add_location(a, file, 14, 14, 260);
+    			add_location(p, file, 14, 1, 247);
     			attr_dev(main, "class", "svelte-2x1evt");
-    			add_location(main, file, 4, 0, 42);
+    			add_location(main, file, 12, 0, 213);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -412,6 +412,15 @@ var app = (function () {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Main', slots, []);
     	let { name } = $$props;
+
+    	window.ipc.receive("test", data => {
+    		$$invalidate(0, name = data);
+    	});
+
+    	window.store.onDidChange("test", (newValue, oldValue) => {
+    		$$invalidate(0, name = newValue);
+    	});
+
     	const writable_props = ['name'];
 
     	Object.keys($$props).forEach(key => {
@@ -467,7 +476,7 @@ var app = (function () {
     const app = new Main({
     	target: document.body,
     	props: {
-    		name: 'Jeff'
+    		name: window.store.get('popupTimeoutMS')
     	}
     });
 

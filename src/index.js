@@ -1,6 +1,10 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
+const Store = require('electron-store');
+const store = new Store({ defaults: { 'popupTimeoutMS': 10000 } });
+
+let mainWindow;
 let popupWindow;
 
 require('electron-reload')(__dirname, {
@@ -17,9 +21,15 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    webPreferences: {
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
+      preload: path.join(__dirname, "windows/main/preload.js") // use a preload script
+    }
   });
 
   // and load the index.html of the app.
@@ -29,10 +39,10 @@ const createWindow = () => {
 
 const createPopup = () => {
   popupWindow = new BrowserWindow({
-      width: 800,
-      height: 300,
-      x: 0, y: 0,
-      frame: true
+    width: 800,
+    height: 300,
+    x: 0, y: 0,
+    frame: true
   });
 
   popupWindow.loadFile(path.join(__dirname, '../public/popup.html'));
@@ -67,3 +77,7 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+ipcMain.on('settingsChanged', (e, args) => {
+  mainWindow.webContents.send('test', 'testing 123');
+});
