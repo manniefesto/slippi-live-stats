@@ -1,6 +1,8 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
+let popupWindow;
+
 require('electron-reload')(__dirname, {
   electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
   awaitWriteFinish: true,
@@ -21,16 +23,29 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
+  mainWindow.loadFile(path.join(__dirname, '../public/main.html'));
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+};
+
+const createPopup = () => {
+  popupWindow = new BrowserWindow({
+      width: 800,
+      height: 300,
+      x: 0, y: 0,
+      frame: true
+  });
+
+  popupWindow.loadFile(path.join(__dirname, '../public/popup.html'));
+  popupWindow.setAlwaysOnTop(true, "screen-saver");
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  createPopup();
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -46,6 +61,7 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
+    createPopup();
   }
 });
 

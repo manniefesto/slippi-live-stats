@@ -474,4 +474,4 @@ var app = (function () {
     return app;
 
 })();
-//# sourceMappingURL=bundle.js.map
+//# sourceMappingURL=main.js.map
