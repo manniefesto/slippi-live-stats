@@ -53,6 +53,8 @@ const createWindow = () => {
 };
 
 const createPopup = () => {
+  closePopup();
+
   popupWindow = new BrowserWindow({
     width: 800,
     height: 300,
@@ -66,13 +68,15 @@ const createPopup = () => {
   popupWindow.loadFile(path.join(__dirname, '../public/popup.html'));
   popupWindow.setAlwaysOnTop(true, "screen-saver");
 
+  
+
   setTimeout(() => {
     closePopup();
   }, store.get('popupSettings.timeout'));
 };
 
 const closePopup = () => {
-  if (popupWindow != null && popupWindow != undefined && !popupWindow.isDestroyed) popupWindow.close;
+  if (popupWindow != undefined && !popupWindow.isDestroyed()) popupWindow.close();
 }
 
 // This method will be called when Electron has finished
@@ -118,6 +122,7 @@ ipcMain.on('statsSettingsChanged', (e, args) => {
 });
 
 ipcMain.on('restartSlippiWatcher', (e, args) => {
+  slippiReplayWatcher.stop();
   tryStartSlippiWatcher();
 });
 

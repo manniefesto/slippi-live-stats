@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld(
     'ipc', {
     send: (channel, data) => {
         // whitelist channels
-        let validChannels = ['slippiSettingsChanged', 'popupSettingsChanged', 'statsSettingsChanged'];
+        let validChannels = ['slippiSettingsChanged', 'popupSettingsChanged', 'statsSettingsChanged', 'restartSlippiWatcher'];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
         }

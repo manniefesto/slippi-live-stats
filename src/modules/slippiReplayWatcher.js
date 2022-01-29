@@ -4,13 +4,20 @@ const chokidar = require("chokidar");
 const _ = require("lodash");
 const fs = require('fs');
 
+let watcher;
+let running = false;
+
 exports.start = async (slippiReplayDir, gameStartCallback, gameEndCallback) => {
 
     if (!fs.existsSync(slippiReplayDir)) {
         return false;
     }
 
-    const watcher = chokidar.watch(slippiReplayDir, {
+    if (running) return true;
+
+    console.log('Restarting slippi watcher');
+
+    watcher = chokidar.watch(slippiReplayDir, {
         ignored: "!*.slp", // TODO: This doesn't work. Use regex?
         depth: 0,
         persistent: true,
@@ -57,5 +64,13 @@ exports.start = async (slippiReplayDir, gameStartCallback, gameEndCallback) => {
         }
     });
 
+    gameEndCallback(null, null);
+
+    running = true;
     return true;
+}
+
+exports.stop = () => {
+    watcher.close();
+    running = false;
 }

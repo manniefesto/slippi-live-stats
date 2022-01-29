@@ -12,6 +12,10 @@
 		slippiWatcherStatus = args;
 	});
 
+	function restartSlippiWatcher() {
+		window.ipc.send('restartSlippiWatcher', null);
+	}
+
 </script>
 
 <main>
@@ -22,7 +26,10 @@
 	<label for="tbPopupSettingsTimeout">Timeout: </label>
 	<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout}>
 
-	{slippiWatcherStatus}
+	SLippi watcher status: {slippiWatcherStatus}
+
+	<button on:click="{ restartSlippiWatcher }">Restart slippi watcher</button>
+
 </main>
 
 <style>
