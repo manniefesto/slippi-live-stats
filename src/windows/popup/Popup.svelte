@@ -1,9 +1,22 @@
 <script>
-	export let name;
+	export let popupSettings;
+	export let statsSettings;
+
+	window.store.onDidChange("popupSettings", (newValue, oldValue) => {
+		popupSettings = newValue;
+	});
+
+	window.store.onDidChange("statsSettings", (newValue, oldValue) => {
+		statsSettings = newValue;
+	});
+
 </script>
 
 <main>
-	POPUP
+	<h1>Popup settings</h1>
+	<p>{JSON.stringify(popupSettings)}</p>
+	<h1>Stats settings</h1>
+	<p>{JSON.stringify(statsSettings)}</p>
 </main>
 
 <style>

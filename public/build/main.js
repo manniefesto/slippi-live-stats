@@ -1,5 +1,5 @@
 
-(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35730/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
+(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
 var app = (function () {
     'use strict';
 
@@ -45,6 +45,10 @@ var app = (function () {
     function space() {
         return text(' ');
     }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -53,6 +57,9 @@ var app = (function () {
     }
     function children(element) {
         return Array.from(element.childNodes);
+    }
+    function set_input_value(input, value) {
+        input.value = value == null ? '' : value;
     }
     function custom_event(type, detail, bubbles = false) {
         const e = document.createEvent('CustomEvent');
@@ -294,6 +301,19 @@ var app = (function () {
         dispatch_dev('SvelteDOMRemove', { node });
         detach(node);
     }
+    function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
+        const modifiers = options === true ? ['capture'] : options ? Array.from(Object.keys(options)) : [];
+        if (has_prevent_default)
+            modifiers.push('preventDefault');
+        if (has_stop_propagation)
+            modifiers.push('stopPropagation');
+        dispatch_dev('SvelteDOMAddEventListener', { node, event, handler, modifiers });
+        const dispose = listen(node, event, handler, options);
+        return () => {
+            dispatch_dev('SvelteDOMRemoveEventListener', { node, event, handler, modifiers });
+            dispose();
+        };
+    }
     function attr_dev(node, attribute, value) {
         attr(node, attribute, value);
         if (value == null)
@@ -341,59 +361,116 @@ var app = (function () {
 
     function create_fragment(ctx) {
     	let main;
-    	let h1;
-    	let t0;
+    	let h10;
     	let t1;
+    	let p0;
+    	let t2_value = JSON.stringify(/*slippiSettings*/ ctx[0]) + "";
     	let t2;
     	let t3;
-    	let p;
-    	let t4;
-    	let a;
+    	let h11;
+    	let t5;
+    	let p1;
+    	let t6_value = JSON.stringify(/*popupSettings*/ ctx[1]) + "";
     	let t6;
+    	let t7;
+    	let h12;
+    	let t9;
+    	let p2;
+    	let t10_value = JSON.stringify(/*statsSettings*/ ctx[2]) + "";
+    	let t10;
+    	let t11;
+    	let label;
+    	let t13;
+    	let input;
+    	let mounted;
+    	let dispose;
 
     	const block = {
     		c: function create() {
     			main = element("main");
-    			h1 = element("h1");
-    			t0 = text("Hello ");
-    			t1 = text(/*name*/ ctx[0]);
-    			t2 = text("!");
+    			h10 = element("h1");
+    			h10.textContent = "Slippi settings";
+    			t1 = space();
+    			p0 = element("p");
+    			t2 = text(t2_value);
     			t3 = space();
-    			p = element("p");
-    			t4 = text("Visit the ");
-    			a = element("a");
-    			a.textContent = "Svelte tutorial";
-    			t6 = text(" to learn how to build Svelte apps.");
-    			attr_dev(h1, "class", "svelte-2x1evt");
-    			add_location(h1, file, 13, 1, 222);
-    			attr_dev(a, "href", "https://svelte.dev/tutorial");
-    			add_location(a, file, 14, 14, 260);
-    			add_location(p, file, 14, 1, 247);
+    			h11 = element("h1");
+    			h11.textContent = "Popup settings";
+    			t5 = space();
+    			p1 = element("p");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			h12 = element("h1");
+    			h12.textContent = "Stats settings";
+    			t9 = space();
+    			p2 = element("p");
+    			t10 = text(t10_value);
+    			t11 = space();
+    			label = element("label");
+    			label.textContent = "Timeout:";
+    			t13 = space();
+    			input = element("input");
+    			attr_dev(h10, "class", "svelte-2x1evt");
+    			add_location(h10, file, 19, 1, 440);
+    			add_location(p0, file, 20, 1, 467);
+    			attr_dev(h11, "class", "svelte-2x1evt");
+    			add_location(h11, file, 21, 1, 509);
+    			add_location(p1, file, 22, 1, 535);
+    			attr_dev(h12, "class", "svelte-2x1evt");
+    			add_location(h12, file, 23, 1, 576);
+    			add_location(p2, file, 24, 1, 602);
+    			attr_dev(label, "for", "tbPopupSettingsTimeout");
+    			add_location(label, file, 26, 1, 645);
+    			attr_dev(input, "id", "tbPopupSettingsTimeout");
+    			add_location(input, file, 27, 1, 701);
     			attr_dev(main, "class", "svelte-2x1evt");
-    			add_location(main, file, 12, 0, 213);
+    			add_location(main, file, 18, 0, 431);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
-    			append_dev(main, h1);
-    			append_dev(h1, t0);
-    			append_dev(h1, t1);
-    			append_dev(h1, t2);
+    			append_dev(main, h10);
+    			append_dev(main, t1);
+    			append_dev(main, p0);
+    			append_dev(p0, t2);
     			append_dev(main, t3);
-    			append_dev(main, p);
-    			append_dev(p, t4);
-    			append_dev(p, a);
-    			append_dev(p, t6);
+    			append_dev(main, h11);
+    			append_dev(main, t5);
+    			append_dev(main, p1);
+    			append_dev(p1, t6);
+    			append_dev(main, t7);
+    			append_dev(main, h12);
+    			append_dev(main, t9);
+    			append_dev(main, p2);
+    			append_dev(p2, t10);
+    			append_dev(main, t11);
+    			append_dev(main, label);
+    			append_dev(main, t13);
+    			append_dev(main, input);
+    			set_input_value(input, /*popupSettings*/ ctx[1]);
+
+    			if (!mounted) {
+    				dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[3]);
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*name*/ 1) set_data_dev(t1, /*name*/ ctx[0]);
+    			if (dirty & /*slippiSettings*/ 1 && t2_value !== (t2_value = JSON.stringify(/*slippiSettings*/ ctx[0]) + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*popupSettings*/ 2 && t6_value !== (t6_value = JSON.stringify(/*popupSettings*/ ctx[1]) + "")) set_data_dev(t6, t6_value);
+    			if (dirty & /*statsSettings*/ 4 && t10_value !== (t10_value = JSON.stringify(/*statsSettings*/ ctx[2]) + "")) set_data_dev(t10, t10_value);
+
+    			if (dirty & /*popupSettings*/ 2 && input.value !== /*popupSettings*/ ctx[1]) {
+    				set_input_value(input, /*popupSettings*/ ctx[1]);
+    			}
     		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -411,43 +488,67 @@ var app = (function () {
     function instance($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Main', slots, []);
-    	let { name } = $$props;
+    	let { slippiSettings } = $$props;
+    	let { popupSettings } = $$props;
+    	let { statsSettings } = $$props;
 
-    	window.ipc.receive("test", data => {
-    		$$invalidate(0, name = data);
+    	window.store.onDidChange("slippiSettings", (newValue, oldValue) => {
+    		$$invalidate(0, slippiSettings = newValue);
     	});
 
-    	window.store.onDidChange("test", (newValue, oldValue) => {
-    		$$invalidate(0, name = newValue);
+    	window.store.onDidChange("popupSettings", (newValue, oldValue) => {
+    		$$invalidate(1, popupSettings = newValue);
     	});
 
-    	const writable_props = ['name'];
+    	window.store.onDidChange("statsSettings", (newValue, oldValue) => {
+    		$$invalidate(2, statsSettings = newValue);
+    	});
+
+    	const writable_props = ['slippiSettings', 'popupSettings', 'statsSettings'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Main> was created with unknown prop '${key}'`);
     	});
 
+    	function input_input_handler() {
+    		popupSettings = this.value;
+    		$$invalidate(1, popupSettings);
+    	}
+
     	$$self.$$set = $$props => {
-    		if ('name' in $$props) $$invalidate(0, name = $$props.name);
+    		if ('slippiSettings' in $$props) $$invalidate(0, slippiSettings = $$props.slippiSettings);
+    		if ('popupSettings' in $$props) $$invalidate(1, popupSettings = $$props.popupSettings);
+    		if ('statsSettings' in $$props) $$invalidate(2, statsSettings = $$props.statsSettings);
     	};
 
-    	$$self.$capture_state = () => ({ name });
+    	$$self.$capture_state = () => ({
+    		slippiSettings,
+    		popupSettings,
+    		statsSettings
+    	});
 
     	$$self.$inject_state = $$props => {
-    		if ('name' in $$props) $$invalidate(0, name = $$props.name);
+    		if ('slippiSettings' in $$props) $$invalidate(0, slippiSettings = $$props.slippiSettings);
+    		if ('popupSettings' in $$props) $$invalidate(1, popupSettings = $$props.popupSettings);
+    		if ('statsSettings' in $$props) $$invalidate(2, statsSettings = $$props.statsSettings);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [name];
+    	return [slippiSettings, popupSettings, statsSettings, input_input_handler];
     }
 
     class Main extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance, create_fragment, safe_not_equal, { name: 0 });
+
+    		init(this, options, instance, create_fragment, safe_not_equal, {
+    			slippiSettings: 0,
+    			popupSettings: 1,
+    			statsSettings: 2
+    		});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -459,16 +560,40 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*name*/ ctx[0] === undefined && !('name' in props)) {
-    			console.warn("<Main> was created without expected prop 'name'");
+    		if (/*slippiSettings*/ ctx[0] === undefined && !('slippiSettings' in props)) {
+    			console.warn("<Main> was created without expected prop 'slippiSettings'");
+    		}
+
+    		if (/*popupSettings*/ ctx[1] === undefined && !('popupSettings' in props)) {
+    			console.warn("<Main> was created without expected prop 'popupSettings'");
+    		}
+
+    		if (/*statsSettings*/ ctx[2] === undefined && !('statsSettings' in props)) {
+    			console.warn("<Main> was created without expected prop 'statsSettings'");
     		}
     	}
 
-    	get name() {
+    	get slippiSettings() {
     		throw new Error("<Main>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set name(value) {
+    	set slippiSettings(value) {
+    		throw new Error("<Main>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get popupSettings() {
+    		throw new Error("<Main>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set popupSettings(value) {
+    		throw new Error("<Main>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get statsSettings() {
+    		throw new Error("<Main>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set statsSettings(value) {
     		throw new Error("<Main>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -476,8 +601,14 @@ var app = (function () {
     const app = new Main({
     	target: document.body,
     	props: {
-    		name: window.store.get('popupTimeoutMS')
+    		slippiSettings: window.store.get('slippiSettings'),
+    		popupSettings: window.store.get('popupSettings'),
+    		statsSettings: window.store.get('statsSettings')
     	}
+    });
+
+    window.store.onDidChange('popupSettings', (newValue, oldVaue) => {
+    	app.props.popupSettings = newValue;
     });
 
     return app;

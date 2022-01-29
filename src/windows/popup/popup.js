@@ -3,7 +3,8 @@ import App from './Popup.svelte';
 const app = new App({
 	target: document.body,
 	props: {
-		name: 'Jeff'
+		popupSettings: window.store.get('popupSettings'),
+		statsSettings: window.store.get('statsSettings')
 	}
 });
 

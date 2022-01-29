@@ -1,19 +1,31 @@
 <script>
-	export let name;
+	export let slippiSettings;
+	export let popupSettings;
+	export let statsSettings;
 
-	window.ipc.receive("test", (data) => {
-            name = data;
-        });
+	window.store.onDidChange("slippiSettings", (newValue, oldValue) => {
+		slippiSettings = newValue;
+	});
 
-	window.store.onDidChange("test", (newValue, oldValue) => {
-		name = newValue;
+	window.store.onDidChange("popupSettings", (newValue, oldValue) => {
+		popupSettings = newValue;
+	});
+
+	window.store.onDidChange("statsSettings", (newValue, oldValue) => {
+		statsSettings = newValue;
 	});
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<h1>Slippi settings</h1>
+	<p>{JSON.stringify(slippiSettings)}</p>
+	<h1>Popup settings</h1>
+	<p>{JSON.stringify(popupSettings)}</p>
+	<h1>Stats settings</h1>
+	<p>{JSON.stringify(statsSettings)}</p>
 
+	<label for="tbPopupSettingsTimeout">Timeout: </label>
+	<input id="tbPopupSettingsTimeout" bind:value={popupSettings}>
 </main>
 
 <style>

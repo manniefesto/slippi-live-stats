@@ -2,7 +2,23 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 const Store = require('electron-store');
-const store = new Store({ defaults: { 'popupTimeoutMS': 10000 } });
+const store = new Store({
+  defaults: {
+    'slippiSettings': {
+      'replayDir': '',
+      'playerCode': ''
+    },
+    'popupSettings': {
+      'timeout': 10000,
+      'positionX': 0,
+      'positionY': 0
+    },
+    'statsSettings': {
+      'showLCancel': true
+    }
+  },
+  watch: true
+});
 
 let mainWindow;
 let popupWindow;
@@ -42,7 +58,10 @@ const createPopup = () => {
     width: 800,
     height: 300,
     x: 0, y: 0,
-    frame: true
+    frame: true,
+    webPreferences: {
+      preload: path.join(__dirname, "windows/popup/preload.js") // use a preload script
+    }
   });
 
   popupWindow.loadFile(path.join(__dirname, '../public/popup.html'));
