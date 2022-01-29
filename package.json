@@ -2,7 +2,7 @@
   "name": "slippi-live-stats",
   "productName": "slippi-live-stats",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Live stats for slippi games",
   "main": "src/index.js",
   "scripts": {
     "start": "concurrently \"npm:svelte-dev\" \"electron-forge start\"",

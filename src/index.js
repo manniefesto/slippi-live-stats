@@ -41,14 +41,13 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: false, // is default value after Electron v5
-      contextIsolation: true, // protect against prototype pollution
-      enableRemoteModule: false, // turn off remote
-      preload: path.join(__dirname, "windows/main/preload.js") // use a preload script
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false,
+      preload: path.join(__dirname, "windows/main/preload.js")
     }
   });
 
-  // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, '../public/main.html'));
 };
 
@@ -61,7 +60,7 @@ const createPopup = () => {
     x: 0, y: 0,
     frame: false,
     webPreferences: {
-      preload: path.join(__dirname, "windows/popup/preload.js") // use a preload script
+      preload: path.join(__dirname, "windows/popup/preload.js")
     }
   });
 
