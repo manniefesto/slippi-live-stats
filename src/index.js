@@ -29,7 +29,6 @@ require('electron-reload')(__dirname, {
   awaitWriteFinish: true,
 });
 
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -51,7 +50,6 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, '../public/main.html'));
-
 };
 
 const createPopup = () => {
@@ -98,8 +96,11 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
+//IPC routing
+
 ipcMain.on('slippiSettingsChanged', (e, args) => {
   store.set('slippiSettings', args);
+  tryStartSlippiWatcher();
 });
 
 ipcMain.on('popupSettingsChanged', (e, args) => {
@@ -112,8 +113,12 @@ ipcMain.on('statsSettingsChanged', (e, args) => {
   popupWindow.webContents.send('popupSettingsChanged', null);
 });
 
-slippiReplayWatcher.start(store.slippiSettings.replayDir, () => {
-  console.log('Game starting');
-}, () => {
-  console.log('Game ended');
-});
+function tryStartSlippiWatcher() {
+  return slippiReplayWatcher.start(store.get('slippiSettings.replayDir'), () => {
+    console.log('Game starting');
+  }, () => {
+    console.log('Game ended');
+  });
+}
+
+tryStartSlippiWatcher();
