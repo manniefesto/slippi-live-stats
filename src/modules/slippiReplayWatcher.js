@@ -4,10 +4,10 @@ const chokidar = require("chokidar");
 const _ = require("lodash");
 const fs = require('fs');
 
-exports.start = (slippiReplayDir, gameStartCallback, gameEndCallback) => {
+exports.start = async (slippiReplayDir, gameStartCallback, gameEndCallback) => {
 
     if (!fs.existsSync(slippiReplayDir)) {
-        return 1;
+        return false;
     }
 
     const watcher = chokidar.watch(slippiReplayDir, {
@@ -44,7 +44,7 @@ exports.start = (slippiReplayDir, gameStartCallback, gameEndCallback) => {
             if (gameEnd) stats = game.getStats()
         } catch (err) {
             console.error(err);
-            return;
+            return false;
         }
 
         if (!gameState.settings && gameSettings) {
@@ -57,5 +57,5 @@ exports.start = (slippiReplayDir, gameStartCallback, gameEndCallback) => {
         }
     });
 
-    return 0;
+    return true;
 }

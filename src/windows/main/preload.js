@@ -11,6 +11,13 @@ contextBridge.exposeInMainWorld(
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
         }
+    },
+    receive: (channel, func) => {
+        let validChannels = ['slippiWatcherStatus'];
+        if (validChannels.includes(channel)) {
+            // Deliberately strip event as it includes `sender` 
+            ipcRenderer.on(channel, (event, ...args) => func(...args));
+        }
     }
 }
 );
@@ -22,6 +29,9 @@ contextBridge.exposeInMainWorld(
     },
     set: (key, value) => {
         return store.set(key, value);
+    },
+    reset: (key) => {
+        store.reset(key);
     }
 }
 );

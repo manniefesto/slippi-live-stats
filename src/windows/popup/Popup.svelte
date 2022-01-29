@@ -2,11 +2,11 @@
 	export let popupSettings;
 	export let statsSettings;
 
-	window.ipc.receive('popupSettingsChanged', (e, args) => {
+	window.ipc.receive('popupSettingsChanged', () => {
 		popupSettings = window.store.get('popupSettings');
 	});
 	
-	window.ipc.receive('statsSettingsChanged', (e, args) => {
+	window.ipc.receive('statsSettingsChanged', () => {
 		statsSettings = window.store.get('statsSettings');
 	});
 </script>

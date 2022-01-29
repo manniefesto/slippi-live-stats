@@ -57,7 +57,7 @@ const createPopup = () => {
     width: 800,
     height: 300,
     x: 0, y: 0,
-    frame: true,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, "windows/popup/preload.js") // use a preload script
     }
@@ -65,14 +65,22 @@ const createPopup = () => {
 
   popupWindow.loadFile(path.join(__dirname, '../public/popup.html'));
   popupWindow.setAlwaysOnTop(true, "screen-saver");
+
+  setTimeout(() => {
+    closePopup();
+  }, store.get('popupSettings.timeout'));
 };
+
+const closePopup = () => {
+  if (popupWindow != null && popupWindow != undefined && !popupWindow.isDestroyed) popupWindow.close;
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-  createPopup();
+  tryStartSlippiWatcher();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -89,7 +97,6 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
-    createPopup();
   }
 });
 
@@ -100,25 +107,26 @@ app.on('activate', () => {
 
 ipcMain.on('slippiSettingsChanged', (e, args) => {
   store.set('slippiSettings', args);
-  tryStartSlippiWatcher();
 });
 
 ipcMain.on('popupSettingsChanged', (e, args) => {
   store.set('popupSettings', args);
-  popupWindow.webContents.send('popupSettingsChanged', null);
 });
 
 ipcMain.on('statsSettingsChanged', (e, args) => {
   store.set('statsSettings', args);
-  popupWindow.webContents.send('popupSettingsChanged', null);
 });
 
-function tryStartSlippiWatcher() {
-  return slippiReplayWatcher.start(store.get('slippiSettings.replayDir'), () => {
-    console.log('Game starting');
-  }, () => {
-    console.log('Game ended');
-  });
-}
+ipcMain.on('restartSlippiWatcher', (e, args) => {
+  tryStartSlippiWatcher();
+});
 
-tryStartSlippiWatcher();
+let tryStartSlippiWatcher = async () => {
+  var running = await slippiReplayWatcher.start(store.get('slippiSettings.replayDir'), () => {
+    closePopup();
+  }, (gameSettings, stats) => {
+    createPopup();
+  });
+
+  mainWindow.webContents.send('slippiWatcherStatus', running);
+}

@@ -2,10 +2,15 @@
 	export let slippiSettings;
 	export let popupSettings;
 	export let statsSettings;
+	let slippiWatcherStatus = false;
 
 	$: { window.ipc.send('slippiSettingsChanged', slippiSettings); };
 	$: { window.ipc.send('popupSettingsChanged', popupSettings); };
 	$: { window.ipc.send('statsSettingsChanged', statsSettings); };
+
+	window.ipc.receive('slippiWatcherStatus', (args) => {
+		slippiWatcherStatus = args;
+	});
 
 </script>
 
@@ -16,6 +21,8 @@
 	<h1>Popup settings</h1>
 	<label for="tbPopupSettingsTimeout">Timeout: </label>
 	<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout}>
+
+	{slippiWatcherStatus}
 </main>
 
 <style>
