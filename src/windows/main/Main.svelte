@@ -3,29 +3,19 @@
 	export let popupSettings;
 	export let statsSettings;
 
-	window.store.onDidChange("slippiSettings", (newValue, oldValue) => {
-		slippiSettings = newValue;
-	});
+	$: { window.ipc.send('slippiSettingsChanged', slippiSettings); };
+	$: { window.ipc.send('popupSettingsChanged', popupSettings); };
+	$: { window.ipc.send('statsSettingsChanged', statsSettings); };
 
-	window.store.onDidChange("popupSettings", (newValue, oldValue) => {
-		popupSettings = newValue;
-	});
-
-	window.store.onDidChange("statsSettings", (newValue, oldValue) => {
-		statsSettings = newValue;
-	});
 </script>
 
 <main>
 	<h1>Slippi settings</h1>
-	<p>{JSON.stringify(slippiSettings)}</p>
+	<label for="tbSlippiSettingsTimeout">Replay dir: </label>
+	<input id="tbSlippiSettingsTimeout" bind:value={slippiSettings.replayDir}>
 	<h1>Popup settings</h1>
-	<p>{JSON.stringify(popupSettings)}</p>
-	<h1>Stats settings</h1>
-	<p>{JSON.stringify(statsSettings)}</p>
-
 	<label for="tbPopupSettingsTimeout">Timeout: </label>
-	<input id="tbPopupSettingsTimeout" bind:value={popupSettings}>
+	<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout}>
 </main>
 
 <style>

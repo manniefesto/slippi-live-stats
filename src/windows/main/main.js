@@ -9,8 +9,4 @@ const app = new App({
 	}
 });
 
-window.store.onDidChange('popupSettings', (newValue, oldVaue) => {
-	app.props.popupSettings = newValue;
-});
-
 export default app;

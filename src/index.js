@@ -1,12 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const slippiReplayWatcher = require('./modules/slippiReplayWatcher');
 
 const Store = require('electron-store');
 const store = new Store({
   defaults: {
     'slippiSettings': {
-      'replayDir': '',
-      'playerCode': ''
+      'replayDir': ''
     },
     'popupSettings': {
       'timeout': 10000,
@@ -14,10 +14,11 @@ const store = new Store({
       'positionY': 0
     },
     'statsSettings': {
-      'showLCancel': true
+      'showLCancel': true,
+      'showAnalogAPM': true,
+      'showDigitalAPM': true
     }
-  },
-  watch: true
+  }
 });
 
 let mainWindow;
@@ -97,6 +98,22 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-ipcMain.on('settingsChanged', (e, args) => {
-  mainWindow.webContents.send('test', 'testing 123');
+ipcMain.on('slippiSettingsChanged', (e, args) => {
+  store.set('slippiSettings', args);
+});
+
+ipcMain.on('popupSettingsChanged', (e, args) => {
+  store.set('popupSettings', args);
+  popupWindow.webContents.send('popupSettingsChanged', null);
+});
+
+ipcMain.on('statsSettingsChanged', (e, args) => {
+  store.set('statsSettings', args);
+  popupWindow.webContents.send('popupSettingsChanged', null);
+});
+
+slippiReplayWatcher.start(store.slippiSettings.replayDir, () => {
+  console.log('Game starting');
+}, () => {
+  console.log('Game ended');
 });

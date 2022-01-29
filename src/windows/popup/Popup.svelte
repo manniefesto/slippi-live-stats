@@ -2,14 +2,13 @@
 	export let popupSettings;
 	export let statsSettings;
 
-	window.store.onDidChange("popupSettings", (newValue, oldValue) => {
-		popupSettings = newValue;
+	window.ipc.receive('popupSettingsChanged', (e, args) => {
+		popupSettings = window.store.get('popupSettings');
 	});
-
-	window.store.onDidChange("statsSettings", (newValue, oldValue) => {
-		statsSettings = newValue;
+	
+	window.ipc.receive('statsSettingsChanged', (e, args) => {
+		statsSettings = window.store.get('statsSettings');
 	});
-
 </script>
 
 <main>
