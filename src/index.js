@@ -3,8 +3,8 @@ const path = require('path');
 const slippiReplayWatcher = require('./modules/slippiReplayWatcher');
 const slippiStatsManager = require('./modules/slippiStatsManager');
 const fs = require('fs');
-
 const Store = require('electron-store');
+
 const store = new Store({
   defaults: {
     'slippiSettings': {
@@ -27,6 +27,9 @@ const store = new Store({
 let mainWindow;
 let popupWindow;
 
+let screenX;
+let screenY;
+
 require('electron-reload')(__dirname, {
   electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
   awaitWriteFinish: true,
@@ -43,6 +46,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -58,11 +62,12 @@ const createPopup = () => {
   closePopup();
 
   popupWindow = new BrowserWindow({
-    width: 600,
-    height: 600,
+    width: screenX,
+    height: screenY,
     x: 0, y: 0,
     frame: false,
     transparent: true,
+    hasShadow: false,
     webPreferences: {
       preload: path.join(__dirname, "windows/popup/preload.js")
     }
@@ -70,6 +75,7 @@ const createPopup = () => {
 
   popupWindow.loadFile(path.join(__dirname, '../public/popup.html'));
   popupWindow.setAlwaysOnTop(true, "screen-saver");
+  popupWindow.setIgnoreMouseEvents(true);
 
   setTimeout(() => {
     closePopup();
@@ -84,8 +90,15 @@ const closePopup = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  const { screen } = require('electron');
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width, height } = primaryDisplay.workAreaSize;
+  screenX = width;
+  screenY = height;
+
   createWindow();
   tryStartSlippiWatcher();
+  mainWindow.reload();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

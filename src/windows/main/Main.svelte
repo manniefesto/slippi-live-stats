@@ -185,7 +185,7 @@
 	}
 
 	nav {
-		background-color: grey;
+		background-color: white;
 	}
 
 	div.content {
