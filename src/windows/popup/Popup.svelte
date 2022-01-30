@@ -1,5 +1,6 @@
 <script>
 	import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
+	import Paper, { Title, Content } from "@smui/paper";
 
 	export let popupSettings;
 	export let statsSettings;
@@ -17,19 +18,21 @@
 
 <main>
 	{#each gameSettings.players as player, i}
-		<div class="statsContainer">
-			{player.displayName}
-			<DataTable style="max-width: 100%;">
-				<Body>
-					{#each generatedStats[i] as stat}
-						<Row>
-							<Cell>{stat.label}</Cell>
-							<Cell>{stat.value}</Cell>
-						</Row>
-					{/each}
-				</Body>
-			</DataTable>
-		</div>
+		<Paper variant="unelevated" style="margin: 8px">
+			<Title>{player.displayName}</Title>
+			<Content>
+				<DataTable style="max-width: 100%;">
+					<Body>
+						{#each generatedStats[i] as stat}
+							<Row>
+								<Cell>{stat.label}</Cell>
+								<Cell>{stat.value}</Cell>
+							</Row>
+						{/each}
+					</Body>
+				</DataTable>
+			</Content>
+		</Paper>
 	{/each}
 </main>
 
@@ -43,11 +46,6 @@
 	main {
 		display: flex;
 		flex-direction: row;
-	}
-
-	.statsContainer {
-		display: flex;
-		flex-direction: column;
 	}
 
 	/* Theme colors. */

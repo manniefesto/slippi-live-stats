@@ -146,7 +146,7 @@ let tryStartSlippiWatcher = async () => {
   var running = await slippiReplayWatcher.start(store.get('slippiSettings.replayDir'), () => {
     closePopup();
   }, (gameSettings, stats) => {
-    let generatedStats = slippiStatsManager.generateSelectedStats(gameSettings, stats);
+    let generatedStats = slippiStatsManager.generateSelectedStats(stats, gameSettings);
     store.set('gameSettings', gameSettings);
     store.set('generatedStats', generatedStats);
     createPopup();
