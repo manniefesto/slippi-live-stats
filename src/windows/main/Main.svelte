@@ -4,7 +4,7 @@
 	import Paper, { Title, Subtitle, Content } from "@smui/paper";
 	import Slider from "@smui/slider";
 	import FormField from "@smui/form-field";
-	import Switch from '@smui/switch';
+	import Switch from "@smui/switch";
 
 	let selection = "Slippi";
 
@@ -71,7 +71,6 @@
 							bind:value={slippiSettings.replayDir}
 							on:click={chooseSlippiReplayDir}
 						/>
-						
 					</Content>
 				</Paper>
 				<Paper variant="unelevated">
@@ -116,33 +115,37 @@
 				</Paper>
 				<Paper variant="unelevated">
 					<Title>Statistics</Title>
-					<Subtitle>
-						Which statistics should we show?
-					</Subtitle>
-					<Content>
-						<FormField align="end">
-							<Switch bind:checked={statsSettings.showLCancelPercent} />
+					<Subtitle>Which statistics should be displayed?</Subtitle>
+					<Content style="display: flex; flex-direction: column;">
+						<FormField>
+							<Switch
+								bind:checked={statsSettings.showLCancelPercent}
+							/>
 							<span
 								slot="label"
-								style="padding-right: 12px; width: max-content; display: block; min-width: 100px;"
+								style="padding-right: 12px; width: max-content; display: block;"
 							>
 								LCancel percentage
 							</span>
 						</FormField>
-						<FormField align="end">
-							<Switch bind:checked={statsSettings.showAnalogAPM} />
+						<FormField>
+							<Switch
+								bind:checked={statsSettings.showAnalogAPM}
+							/>
 							<span
 								slot="label"
-								style="padding-right: 12px; width: max-content; display: block; min-width: 100px;"
+								style="padding-right: 12px; width: max-content; display: block;"
 							>
 								Analog APM
 							</span>
 						</FormField>
-						<FormField align="end">
-							<Switch bind:checked={statsSettings.showDigitalAPM} />
+						<FormField>
+							<Switch
+								bind:checked={statsSettings.showDigitalAPM}
+							/>
 							<span
 								slot="label"
-								style="padding-right: 12px; width: max-content; display: block; min-width: 100px;"
+								style="padding-right: 12px; width: max-content; display: block;"
 							>
 								Digital APM
 							</span>
