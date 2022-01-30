@@ -70,6 +70,8 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.63",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "@smui/list": "^6.0.0-beta.13",
+    "@smui/textfield": "^6.0.0-beta.13",
     "electron": "16.0.8",
     "sirv-cli": "^2.0.0"
   }

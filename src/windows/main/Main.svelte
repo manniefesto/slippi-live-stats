@@ -1,53 +1,107 @@
 <script>
+	import List, { Item, Separator, Text } from "@smui/list";
+	let selection = "Slippi";
+
 	export let slippiSettings;
 	export let popupSettings;
 	export let statsSettings;
 	let slippiWatcherStatus = false;
 
-	$: { window.ipc.send('slippiSettingsChanged', slippiSettings); };
-	$: { window.ipc.send('popupSettingsChanged', popupSettings); };
-	$: { window.ipc.send('statsSettingsChanged', statsSettings); };
+	$: {
+		window.ipc.send("slippiSettingsChanged", slippiSettings);
+	}
+	$: {
+		window.ipc.send("popupSettingsChanged", popupSettings);
+	}
+	$: {
+		window.ipc.send("statsSettingsChanged", statsSettings);
+	}
 
-	window.ipc.receive('slippiWatcherStatus', (args) => {
+	window.ipc.receive("slippiWatcherStatus", (args) => {
 		slippiWatcherStatus = args;
 	});
 
 	function restartSlippiWatcher() {
-		window.ipc.send('restartSlippiWatcher', null);
+		window.ipc.send("restartSlippiWatcher", null);
 	}
-
 </script>
 
+
 <main>
+	<nav>
+		<List class="demo-list">
+			<Item selected={selection === "Slippi"} on:SMUI:action={() => (selection = "Slippi")}
+				><Text>Slippi</Text></Item
+			>
+			<Item selected={selection === "Popup"} on:SMUI:action={() => (selection = "Popup")}
+				><Text>Popup</Text></Item
+			>
+			<Item selected={selection === "Stats"} on:SMUI:action={() => (selection = "Stats")}
+				><Text>Stats</Text></Item
+			>
+		</List>
+	</nav>
+	<div class="content">
+		{#if selection === "Slippi"}
+			<div>
+				<h1>Slippi settings</h1>
+				<label for="tbSlippiSettingsTimeout">Replay dir: </label>
+				<input id="tbSlippiSettingsTimeout" bind:value={slippiSettings.replayDir} />
+			</div>
+		{/if}
+		{#if selection === "Popup"}
+			<div>
+				<h1>Popup settings</h1>
+				<label for="tbPopupSettingsTimeout">Timeout: </label>
+				<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout} />
+			</div>
+		{/if}
+		{#if selection === "Stats"}
+			<div>
+				<h1>Stats settings</h1>
+				<label for="tbPopupSettingsTimeout">Timeout: </label>
+				<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout} />
+			</div>
+		{/if}
+	</div>
+</main>
+
+
+<!-- <main>
+	<pre class="status">Clicked: {clicked}</pre>
+
 	<h1>Slippi settings</h1>
 	<label for="tbSlippiSettingsTimeout">Replay dir: </label>
-	<input id="tbSlippiSettingsTimeout" bind:value={slippiSettings.replayDir}>
+	<input id="tbSlippiSettingsTimeout" bind:value={slippiSettings.replayDir} />
 	<h1>Popup settings</h1>
 	<label for="tbPopupSettingsTimeout">Timeout: </label>
-	<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout}>
+	<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout} />
 
 	SLippi watcher status: {slippiWatcherStatus}
 
-	<button on:click="{ restartSlippiWatcher }">Restart slippi watcher</button>
-
-</main>
+	<button on:click={restartSlippiWatcher}>Restart slippi watcher</button>
+</main> -->
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+	
 	@media (min-width: 640px) {
 		main {
 			max-width: none;
 		}
+	}
+
+	main {
+		display: grid;
+		grid-template-columns: 200px auto;
+		height: 100%;
+	}
+
+	nav {
+		background-color: grey;
+	}
+
+	div.content {
+		overflow-y: scroll;
+		padding: 8px;
 	}
 </style>
