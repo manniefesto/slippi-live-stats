@@ -122,11 +122,19 @@ ipcMain.on('statsSettingsChanged', (e, args) => {
 });
 
 ipcMain.on('restartSlippiWatcher', (e, args) => {
-  slippiReplayWatcher.stop();
   tryStartSlippiWatcher();
 });
 
+ipcMain.on('selectSlippiReplayFolder', () => {
+  dialog.showOpenDialog({properties: ['openDirectory']}).then(result => {
+    store.set('slippiSettings.replayDir', result.filePaths[0]);
+    tryStartSlippiWatcher();
+  });
+});
+
 let tryStartSlippiWatcher = async () => {
+  slippiReplayWatcher.stop();
+  
   var running = await slippiReplayWatcher.start(store.get('slippiSettings.replayDir'), () => {
     closePopup();
   }, (gameSettings, stats) => {
