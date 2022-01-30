@@ -52,7 +52,8 @@ const createWindow = () => {
       contextIsolation: true,
       enableRemoteModule: false,
       preload: path.join(__dirname, "windows/main/preload.js")
-    }
+    },
+    icon: path.join(__dirname, 'assets/icon.png')
   });
 
   mainWindow.loadFile(path.join(__dirname, '../public/main.html'));
