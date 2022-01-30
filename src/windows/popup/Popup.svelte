@@ -1,6 +1,6 @@
 <script>
 	import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
-	import Paper, { Title, Content } from "@smui/paper";
+	import Paper, { Title, Subtitle, Content } from "@smui/paper";
 
 	export let popupSettings;
 	export let statsSettings;
@@ -19,7 +19,10 @@
 <main>
 	{#each gameSettings.players as player, i}
 		<Paper variant="unelevated" style="margin: 8px">
-			<Title>{player.displayName}</Title>
+			<Title style="text-align: center"><img alt="" src="images/characters/{player.characterId}/{player.characterColor}/stock.png" style="height:50px"></Title>
+			<Subtitle style="text-align: center">
+				{player.displayName}
+			</Subtitle>
 			<Content>
 				<DataTable style="max-width: 100%;">
 					<Body>

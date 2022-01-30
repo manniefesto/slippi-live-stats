@@ -58,8 +58,8 @@ const createPopup = () => {
   closePopup();
 
   popupWindow = new BrowserWindow({
-    width: 800,
-    height: 300,
+    width: 600,
+    height: 600,
     x: 0, y: 0,
     frame: false,
     transparent: true,
