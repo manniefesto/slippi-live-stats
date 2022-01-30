@@ -6,7 +6,8 @@ const Store = require('electron-store');
 const store = new Store({
   defaults: {
     'slippiSettings': {
-      'replayDir': ''
+      'replayDir': '',
+      'playerCode': ''
     },
     'popupSettings': {
       'timeout': 10000,
@@ -71,7 +72,7 @@ const createPopup = () => {
 
   setTimeout(() => {
     closePopup();
-  }, store.get('popupSettings.timeout'));
+  }, store.get('popupSettings.timeout') * 1000);
 };
 
 const closePopup = () => {

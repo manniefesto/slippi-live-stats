@@ -1,5 +1,10 @@
 <script>
 	import List, { Item, Separator, Text } from "@smui/list";
+	import Textfield from "@smui/textfield";
+	import Icon from "@smui/textfield/icon";
+	import Paper, { Title, Subtitle, Content } from "@smui/paper";
+	import Slider from "@smui/slider";
+	import FormField from "@smui/form-field";
 	let selection = "Slippi";
 
 	export let slippiSettings;
@@ -26,17 +31,22 @@
 	}
 </script>
 
-
 <main>
 	<nav>
 		<List class="demo-list">
-			<Item selected={selection === "Slippi"} on:SMUI:action={() => (selection = "Slippi")}
+			<Item
+				selected={selection === "Slippi"}
+				on:SMUI:action={() => (selection = "Slippi")}
 				><Text>Slippi</Text></Item
 			>
-			<Item selected={selection === "Popup"} on:SMUI:action={() => (selection = "Popup")}
+			<Item
+				selected={selection === "Popup"}
+				on:SMUI:action={() => (selection = "Popup")}
 				><Text>Popup</Text></Item
 			>
-			<Item selected={selection === "Stats"} on:SMUI:action={() => (selection = "Stats")}
+			<Item
+				selected={selection === "Stats"}
+				on:SMUI:action={() => (selection = "Stats")}
 				><Text>Stats</Text></Item
 			>
 		</List>
@@ -44,28 +54,74 @@
 	<div class="content">
 		{#if selection === "Slippi"}
 			<div>
-				<h1>Slippi settings</h1>
-				<label for="tbSlippiSettingsTimeout">Replay dir: </label>
-				<input id="tbSlippiSettingsTimeout" bind:value={slippiSettings.replayDir} />
+				<Paper variant="unelevated">
+					<Title>Replay directory</Title>
+					<Subtitle>
+						This is the location where your slippi replays are
+						stored
+					</Subtitle>
+					<Content>
+						<Textfield
+							style="width: 100%;"
+							variant="outlined"
+							bind:value={slippiSettings.replayDir}
+						/>
+					</Content>
+				</Paper>
+				<Paper variant="unelevated">
+					<Title>Player code</Title>
+					<Subtitle>This is used to filter the stats output</Subtitle>
+					<Content>
+						<Textfield
+							style="width: 100%;"
+							variant="outlined"
+							bind:value={slippiSettings.playerCode}
+						/>
+					</Content>
+				</Paper>
 			</div>
 		{/if}
 		{#if selection === "Popup"}
 			<div>
-				<h1>Popup settings</h1>
-				<label for="tbPopupSettingsTimeout">Timeout: </label>
-				<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout} />
+				<Paper variant="unelevated">
+					<Title>Timeout</Title>
+					<Subtitle>
+						How long should the popup stay on the screen?
+					</Subtitle>
+					<Content>
+						<FormField align="end" style="display: flex;">
+							<Slider
+								style="flex-grow: 1;"
+								bind:value={popupSettings.timeout}
+								min={1}
+								max={30}
+								step={1}
+								discrete
+								input$aria-label="Discrete slider"
+							/>
+							<span
+								slot="label"
+								style="padding-right: 12px; width: max-content; display: block; min-width: 100px;"
+							>
+								{popupSettings.timeout} seconds
+							</span>
+						</FormField>
+					</Content>
+				</Paper>
 			</div>
 		{/if}
 		{#if selection === "Stats"}
 			<div>
 				<h1>Stats settings</h1>
 				<label for="tbPopupSettingsTimeout">Timeout: </label>
-				<input id="tbPopupSettingsTimeout" bind:value={popupSettings.timeout} />
+				<input
+					id="tbPopupSettingsTimeout"
+					bind:value={popupSettings.timeout}
+				/>
 			</div>
 		{/if}
 	</div>
 </main>
-
 
 <!-- <main>
 	<pre class="status">Clicked: {clicked}</pre>
@@ -81,9 +137,7 @@
 
 	<button on:click={restartSlippiWatcher}>Restart slippi watcher</button>
 </main> -->
-
 <style>
-	
 	@media (min-width: 640px) {
 		main {
 			max-width: none;
