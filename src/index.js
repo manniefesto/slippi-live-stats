@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const slippiReplayWatcher = require('./modules/slippiReplayWatcher');
 
@@ -111,6 +111,7 @@ app.on('activate', () => {
 
 ipcMain.on('slippiSettingsChanged', (e, args) => {
   store.set('slippiSettings', args);
+  tryStartSlippiWatcher();
 });
 
 ipcMain.on('popupSettingsChanged', (e, args) => {
@@ -127,17 +128,17 @@ ipcMain.on('restartSlippiWatcher', (e, args) => {
 
 ipcMain.on('selectSlippiReplayFolder', () => {
   dialog.showOpenDialog({properties: ['openDirectory']}).then(result => {
-    store.set('slippiSettings.replayDir', result.filePaths[0]);
-    tryStartSlippiWatcher();
+    mainWindow.webContents.send('slippiReplayDirectoryChosen', result.filePaths[0]);
   });
 });
 
 let tryStartSlippiWatcher = async () => {
-  slippiReplayWatcher.stop();
-  
+  if (slippiReplayWatcher != undefined) slippiReplayWatcher.stop();
   var running = await slippiReplayWatcher.start(store.get('slippiSettings.replayDir'), () => {
     closePopup();
   }, (gameSettings, stats) => {
+    store.set('gameSettings', gameSettings);
+    store.set('stats', stats);
     createPopup();
   });
 

@@ -26,8 +26,16 @@
 		slippiWatcherStatus = args;
 	});
 
+	window.ipc.receive("slippiReplayDirectoryChosen", (directory) => {
+		slippiSettings.replayDir = directory;
+	});
+
 	function restartSlippiWatcher() {
 		window.ipc.send("restartSlippiWatcher", null);
+	}
+
+	function chooseSlippiReplayDir() {
+		window.ipc.send("selectSlippiReplayFolder", null);
 	}
 </script>
 
@@ -65,7 +73,9 @@
 							style="width: 100%;"
 							variant="outlined"
 							bind:value={slippiSettings.replayDir}
+							on:click={chooseSlippiReplayDir}
 						/>
+						
 					</Content>
 				</Paper>
 				<Paper variant="unelevated">

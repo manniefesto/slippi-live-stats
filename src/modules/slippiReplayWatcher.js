@@ -15,8 +15,6 @@ exports.start = async (slippiReplayDir, gameStartCallback, gameEndCallback) => {
 
     if (running) return true;
 
-    console.log('Restarting slippi watcher');
-
     watcher = chokidar.watch(slippiReplayDir, {
         ignored: "!*.slp", // TODO: This doesn't work. Use regex?
         depth: 0,
@@ -71,6 +69,6 @@ exports.start = async (slippiReplayDir, gameStartCallback, gameEndCallback) => {
 }
 
 exports.stop = () => {
-    watcher.close();
+    if (watcher != undefined) watcher.close();
     running = false;
 }

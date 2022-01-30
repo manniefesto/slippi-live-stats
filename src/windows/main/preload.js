@@ -7,13 +7,13 @@ contextBridge.exposeInMainWorld(
     'ipc', {
     send: (channel, data) => {
         // whitelist channels
-        let validChannels = ['slippiSettingsChanged', 'popupSettingsChanged', 'statsSettingsChanged', 'restartSlippiWatcher'];
+        let validChannels = ['slippiSettingsChanged', 'popupSettingsChanged', 'statsSettingsChanged', 'restartSlippiWatcher', 'selectSlippiReplayFolder'];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
         }
     },
     receive: (channel, func) => {
-        let validChannels = ['slippiWatcherStatus'];
+        let validChannels = ['slippiWatcherStatus', 'slippiReplayDirectoryChosen'];
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender` 
             ipcRenderer.on(channel, (event, ...args) => func(...args));
