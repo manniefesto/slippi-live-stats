@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const slippiReplayWatcher = require('./modules/slippiReplayWatcher');
 const slippiStatsManager = require('./modules/slippiStatsManager');
+const fs = require('fs');
 
 const Store = require('electron-store');
 const store = new Store({
@@ -61,6 +62,7 @@ const createPopup = () => {
     height: 300,
     x: 0, y: 0,
     frame: false,
+    transparent: true,
     webPreferences: {
       preload: path.join(__dirname, "windows/popup/preload.js")
     }
@@ -69,11 +71,9 @@ const createPopup = () => {
   popupWindow.loadFile(path.join(__dirname, '../public/popup.html'));
   popupWindow.setAlwaysOnTop(true, "screen-saver");
 
-  
-
-  // setTimeout(() => {
-  //   closePopup();
-  // }, store.get('popupSettings.timeout') * 1000);
+  setTimeout(() => {
+    closePopup();
+  }, store.get('popupSettings.timeout') * 1000);
 };
 
 const closePopup = () => {
@@ -125,6 +125,14 @@ ipcMain.on('statsSettingsChanged', (e, args) => {
 
 ipcMain.on('restartSlippiWatcher', (e, args) => {
   tryStartSlippiWatcher();
+});
+
+ipcMain.on('demoPopup', (e, args) => {
+  const exampleStats = JSON.parse(fs.readFileSync('./src/exampleData/stats.json', 'utf8'));
+  let generatedStats = slippiStatsManager.generateSelectedStats(exampleStats.stats, exampleStats.gameSettings);
+  store.set('gameSettings', exampleStats.gameSettings);
+  store.set('generatedStats', generatedStats);
+  createPopup();
 });
 
 ipcMain.on('selectSlippiReplayFolder', () => {

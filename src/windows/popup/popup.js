@@ -6,8 +6,7 @@ const app = new App({
 		popupSettings: window.store.get('popupSettings'),
 		statsSettings: window.store.get('statsSettings'),
 		gameSettings: window.store.get('gameSettings'),
-		port1Stats: window.store.get('port1Stats'),
-		port2Stats: window.store.get('port2Stats')
+		generatedStats: window.store.get('generatedStats')
 	}
 });
 

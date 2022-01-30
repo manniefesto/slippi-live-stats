@@ -5,6 +5,7 @@
 	import Slider from "@smui/slider";
 	import FormField from "@smui/form-field";
 	import Switch from "@smui/switch";
+	import Button, { Label } from '@smui/button';
 
 	let selection = "Slippi";
 
@@ -38,6 +39,10 @@
 	function chooseSlippiReplayDir() {
 		window.ipc.send("selectSlippiReplayFolder", null);
 	}
+
+	function demoPopup() {
+		window.ipc.send("demoPopup", null);
+	}
 </script>
 
 <main>
@@ -58,6 +63,9 @@
 	<div class="content">
 		{#if selection === "Slippi"}
 			<div>
+				<Button on:click={restartSlippiWatcher} variant="raised">
+					<Label>Restart replay monitor</Label>
+				</Button>
 				<Paper variant="unelevated">
 					<Title>Replay directory</Title>
 					<Subtitle>
@@ -73,21 +81,13 @@
 						/>
 					</Content>
 				</Paper>
-				<Paper variant="unelevated">
-					<Title>Player code</Title>
-					<Subtitle>This is used to filter the stats output</Subtitle>
-					<Content>
-						<Textfield
-							style="width: 100%;"
-							variant="outlined"
-							bind:value={slippiSettings.playerCode}
-						/>
-					</Content>
-				</Paper>
 			</div>
 		{/if}
 		{#if selection === "Popup"}
 			<div>
+				<Button on:click={demoPopup} variant="raised">
+					<Label>Test popup</Label>
+				</Button>
 				<Paper variant="unelevated">
 					<Title>Timeout</Title>
 					<Subtitle>
