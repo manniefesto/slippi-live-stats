@@ -27,9 +27,6 @@ const store = new Store({
 let mainWindow;
 let popupWindow;
 
-let screenX;
-let screenY;
-
 require('electron-reload')(__dirname, {
   electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
   awaitWriteFinish: true,
@@ -63,8 +60,8 @@ const createPopup = () => {
   closePopup();
 
   popupWindow = new BrowserWindow({
-    width: screenX,
-    height: screenY,
+    width: 600,
+    height: 600,
     x: 0, y: 0,
     frame: false,
     transparent: true,
@@ -76,8 +73,6 @@ const createPopup = () => {
 
   popupWindow.loadFile(path.join(__dirname, '../public/popup.html'));
   popupWindow.setAlwaysOnTop(true, "screen-saver");
-  popupWindow.setIgnoreMouseEvents(true);
-
   setTimeout(() => {
     closePopup();
   }, store.get('popupSettings.timeout') * 1000);
@@ -91,12 +86,6 @@ const closePopup = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  const { screen } = require('electron');
-  const primaryDisplay = screen.getPrimaryDisplay();
-  const { width, height } = primaryDisplay.workAreaSize;
-  screenX = width;
-  screenY = height;
-
   createWindow();
   tryStartSlippiWatcher();
   mainWindow.reload();
