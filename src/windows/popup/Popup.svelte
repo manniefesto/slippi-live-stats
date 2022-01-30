@@ -19,7 +19,13 @@
 <main>
 	{#each gameSettings.players as player, i}
 		<Paper variant="unelevated" style="margin: 8px">
-			<Title style="text-align: center"><img alt="" src="images/characters/{player.characterId}/{player.characterColor}/stock.png" style="height:50px"></Title>
+			<Title style="text-align: center"
+				><img
+					alt=""
+					src="images/characters/{player.characterId}/{player.characterColor}/stock.png"
+					style="height:50px"
+				/></Title
+			>
 			<Subtitle style="text-align: center">
 				{player.displayName}
 			</Subtitle>
