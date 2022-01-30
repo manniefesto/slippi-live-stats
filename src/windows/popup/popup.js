@@ -5,8 +5,9 @@ const app = new App({
 	props: {
 		popupSettings: window.store.get('popupSettings'),
 		statsSettings: window.store.get('statsSettings'),
-		gaeSettings: window.store.get('gameSettings'),
-		stats: window.store.get('stats')
+		gameSettings: window.store.get('gameSettings'),
+		port1Stats: window.store.get('port1Stats'),
+		port2Stats: window.store.get('port2Stats')
 	}
 });
 

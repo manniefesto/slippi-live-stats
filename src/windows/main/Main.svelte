@@ -1,10 +1,11 @@
 <script>
-	import List, { Item, Separator, Text } from "@smui/list";
+	import List, { Item, Text } from "@smui/list";
 	import Textfield from "@smui/textfield";
-	import Icon from "@smui/textfield/icon";
 	import Paper, { Title, Subtitle, Content } from "@smui/paper";
 	import Slider from "@smui/slider";
 	import FormField from "@smui/form-field";
+	import Switch from '@smui/switch';
+
 	let selection = "Slippi";
 
 	export let slippiSettings;
@@ -51,11 +52,6 @@
 				selected={selection === "Popup"}
 				on:SMUI:action={() => (selection = "Popup")}
 				><Text>Popup</Text></Item
-			>
-			<Item
-				selected={selection === "Stats"}
-				on:SMUI:action={() => (selection = "Stats")}
-				><Text>Stats</Text></Item
 			>
 		</List>
 	</nav>
@@ -118,16 +114,41 @@
 						</FormField>
 					</Content>
 				</Paper>
-			</div>
-		{/if}
-		{#if selection === "Stats"}
-			<div>
-				<h1>Stats settings</h1>
-				<label for="tbPopupSettingsTimeout">Timeout: </label>
-				<input
-					id="tbPopupSettingsTimeout"
-					bind:value={popupSettings.timeout}
-				/>
+				<Paper variant="unelevated">
+					<Title>Statistics</Title>
+					<Subtitle>
+						Which statistics should we show?
+					</Subtitle>
+					<Content>
+						<FormField align="end">
+							<Switch bind:checked={statsSettings.showLCancelPercent} />
+							<span
+								slot="label"
+								style="padding-right: 12px; width: max-content; display: block; min-width: 100px;"
+							>
+								LCancel percentage
+							</span>
+						</FormField>
+						<FormField align="end">
+							<Switch bind:checked={statsSettings.showAnalogAPM} />
+							<span
+								slot="label"
+								style="padding-right: 12px; width: max-content; display: block; min-width: 100px;"
+							>
+								Analog APM
+							</span>
+						</FormField>
+						<FormField align="end">
+							<Switch bind:checked={statsSettings.showDigitalAPM} />
+							<span
+								slot="label"
+								style="padding-right: 12px; width: max-content; display: block; min-width: 100px;"
+							>
+								Digital APM
+							</span>
+						</FormField>
+					</Content>
+				</Paper>
 			</div>
 		{/if}
 	</div>

@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const slippiReplayWatcher = require('./modules/slippiReplayWatcher');
+const slippiStatsManager = require('./modules/slippiStatsManager');
 
 const Store = require('electron-store');
 const store = new Store({
@@ -10,12 +11,12 @@ const store = new Store({
       'playerCode': ''
     },
     'popupSettings': {
-      'timeout': 10000,
+      'timeout': 10,
       'positionX': 0,
       'positionY': 0
     },
     'statsSettings': {
-      'showLCancel': true,
+      'showLCancelPercent': true,
       'showAnalogAPM': true,
       'showDigitalAPM': true
     }
@@ -70,9 +71,9 @@ const createPopup = () => {
 
   
 
-  setTimeout(() => {
-    closePopup();
-  }, store.get('popupSettings.timeout') * 1000);
+  // setTimeout(() => {
+  //   closePopup();
+  // }, store.get('popupSettings.timeout') * 1000);
 };
 
 const closePopup = () => {
@@ -137,8 +138,9 @@ let tryStartSlippiWatcher = async () => {
   var running = await slippiReplayWatcher.start(store.get('slippiSettings.replayDir'), () => {
     closePopup();
   }, (gameSettings, stats) => {
+    let generatedStats = slippiStatsManager.generateSelectedStats(gameSettings, stats);
     store.set('gameSettings', gameSettings);
-    store.set('stats', stats);
+    store.set('generatedStats', generatedStats);
     createPopup();
   });
 

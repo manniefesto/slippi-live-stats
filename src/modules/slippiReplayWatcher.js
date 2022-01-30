@@ -62,8 +62,6 @@ exports.start = async (slippiReplayDir, gameStartCallback, gameEndCallback) => {
         }
     });
 
-    gameEndCallback(null, null);
-
     running = true;
     return true;
 }
